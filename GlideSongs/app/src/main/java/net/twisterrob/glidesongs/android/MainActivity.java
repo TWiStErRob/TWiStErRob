@@ -53,7 +53,7 @@ public class MainActivity extends ListActivity {
 
 
     private void select(int position) {
-        position = Math.max(Math.min(position, adapter.getCount()), 0);
+        position = Math.max(Math.min(position, adapter.getCount() - 1), 0);
         Cursor cursor = (Cursor) adapter.getItem(position);
         String icon = cursor.getString(cursor.getColumnIndexOrThrow("icon"));
         String title = cursor.getString(cursor.getColumnIndexOrThrow("title"));
