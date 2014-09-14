@@ -1,0 +1,49 @@
+// All these are created as subprojects but in real life these are totally separate projects run by different companies.
+// It's just easier to demonstrate if we have one "super-project".
+
+subprojects {
+	apply plugin: 'java'
+
+	repositories {
+		flatDir {
+			name "flatRepo"
+			dirs "${rootProject.projectDir}/repo"
+		}
+	}
+
+	uploadArchives {
+		repositories {
+			add project.repositories.flatRepo
+		}
+	}
+}
+
+project(':library') {
+	dependencies {
+		compile 'JavaOverload:lib1:unspecified'
+		compile 'JavaOverload:lib2:unspecified'
+	}
+}
+
+project(':app') {
+	dependencies {
+		compile 'JavaOverload:lib1:unspecified'
+		compile 'JavaOverload:library:unspecified'
+	}
+	jar {
+		manifest {
+			attributes 'Main-Class': 'my.app.Main'
+		}
+	}
+}
+
+project(':') {
+	task clean(type: Delete) {
+		delete 'repo'
+	}
+}
+
+// Simulate existence of all dependency libraries in the "central repo" before building the next one
+project(':library').tasks.compileJava.dependsOn << project(':lib1'   ).tasks['uploadArchives']
+project(':library').tasks.compileJava.dependsOn << project(':lib2'   ).tasks['uploadArchives']
+project(':app'    ).tasks.compileJava.dependsOn << project(':library').tasks['uploadArchives']
