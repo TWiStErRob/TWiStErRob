@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Glide Songs</string>
+    <string name="title_playing">playing: <i>%1$s</i></string>
+</resources>
