@@ -75,6 +75,8 @@ _This is unwelcome because it clutters the namespace, slows down build, make pac
 _Same error_
  3. Call via reflection: `(String)h.getClass().getMethod("which", Obj1.class).invoke(h, new Object[] {o});`<br/>
 _works, but seriously?!_
- 4. Add another method which doesn't overload: `String whichLib1(Obj1 o)`<br/>
+ 4. Add another method for `lib2`: `String whichLib2(Obj2 o)` and remove `which(Obj2)` overload<br/>
+_This is a breaking change since all users of the support library (`lib2`) would need to change their call to the new method. However it would make code cleaner communicate that they're using v4._
+ 5. Add another method which doesn't overload: `String whichLib1(Obj1 o)`<br/>
 _This might work._
- 5. _... tell me if you have one_
+ 6. _... tell me if you have one_
