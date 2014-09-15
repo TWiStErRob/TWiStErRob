@@ -65,3 +65,16 @@ Questions
 Do I really have to depend on v4 to use Glide?
 How could Glide not break its interface, but don't force me to depend v4 at the same time?
 Why is this happening in the first place? Java by-design? Is it fixed in Java 7/8? Is there a compiler switch?
+
+
+Tried Solutions
+---------------
+ 1. Adding dependency for v4 (`lib2`)<br/>
+_This is unwelcome because it clutters the namespace, slows down build, make package bigger, etc..._
+ 2. Change `String which(Obj2 o)` to `<T extends Obj2> String which(T o)` hoping that erasure will relax the dependency.<br/>
+_Same error_
+ 3. Call via reflection: `(String)h.getClass().getMethod("which", Obj1.class).invoke(h, new Object[] {o});`<br/>
+_works, but seriously?!_
+ 4. Add another method which doesn't overload: `String whichLib1(Obj1 o)`<br/>
+_This might work._
+ 5. _... tell me if you have one_
