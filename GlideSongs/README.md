@@ -17,6 +17,6 @@ Seamsless import in Android Studio.
 Try it
 ------
 ```
-gradlew run
+gradlew runDebug
 ```
 Note: _don't forget to plug your device in first_!
