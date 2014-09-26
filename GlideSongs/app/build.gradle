@@ -4,7 +4,8 @@ android {
     compileSdkVersion 20
     buildToolsVersion "20.0.0"
     lintOptions {
-        disable 'OldTargetApi'
+        checkAllWarnings
+        disable 'OldTargetApi', 'IconXmlAndPng'
     }
 
     compileOptions {

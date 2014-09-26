@@ -1,4 +1,4 @@
-package net.twisterrob.glidesongs.android;
+package net.twisterrob.glide.songs;
 
 import java.io.BufferedReader;
 import java.io.IOException;

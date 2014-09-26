@@ -1,4 +1,4 @@
-package net.twisterrob.glidesongs.android;
+package net.twisterrob.glide.songs;
 
 import android.app.ListActivity;
 import android.content.Context;
@@ -17,8 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-
-import net.twisterrob.glidesongs.R;
 
 import java.io.InputStream;
 import java.util.Locale;
