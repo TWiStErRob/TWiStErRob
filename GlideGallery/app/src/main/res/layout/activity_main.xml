@@ -1,0 +1,40 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:context=".MainActivity"
+    >
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="30"
+        android:layout_margin="4dp"
+        android:padding="4dp"
+        android:onClick="glide"
+        android:src="@drawable/ic_launcher"
+        android:background="#3000"
+        android:contentDescription="@string/glide_cd"
+        />
+
+    <EditText
+        android:id="@+id/uri"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/uri_default"
+        android:inputType="textUri"
+        />
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="70"
+        android:scrollbars="vertical"
+        android:textIsSelectable="true"
+        />
+</LinearLayout>

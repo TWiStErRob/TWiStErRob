@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Glide Gallery</string>
+    <string name="subtitle">Android %1$s / API %2$d</string>
+    <string name="uri_default">content://media/external/images/media/1</string>
+    <string name="glide_cd">Image loaded with Glide</string>
+</resources>

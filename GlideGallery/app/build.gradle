@@ -1,0 +1,43 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 20
+    buildToolsVersion "20.0.0"
+
+    defaultConfig {
+        applicationId "net.twisterrob.glide.gallery"
+        minSdkVersion 10
+        targetSdkVersion 20
+        versionCode 1
+        versionName "1.0"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    applicationVariants.all { variant ->
+        if (variant.install) {
+            tasks.create(name: "run${variant.name.capitalize()}", type: Exec, dependsOn: variant.install) {
+                description "Installs the APK for ${variant.description}, and then runs the main launcher activity."
+                def getMainActivity = { file ->
+                    new XmlSlurper().parse(file).application.activity.find{ it.'intent-filter'.find{ filter ->
+                        return filter.action  .find{it.'@android:name'.text() == 'android.intent.action.MAIN'      } \
+                            && filter.category.find{it.'@android:name'.text() == 'android.intent.category.LAUNCHER'}
+                    }}.'@android:name'
+                }
+                doFirst {
+                    def activityClass = getMainActivity(variant.outputs.processManifest.manifestOutputFile)
+                    commandLine android.adbExe, 'shell', 'am', 'start', '-n', "${variant.applicationId}/${activityClass}"
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    compile 'com.github.bumptech.glide:glide:3.3.1'
+    compile 'com.android.support:appcompat-v7:20.0.0'
+    compile 'com.android.support:support-v4:20.0.0'
+}
