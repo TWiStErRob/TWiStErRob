@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,9 +17,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.ImageViewTarget;
+import com.bumptech.glide.request.target.Target;
 import java.io.InputStream;
 import java.util.Locale;
 import java.util.Random;
@@ -26,12 +30,14 @@ import java.util.Random;
 public class MainActivity extends ListActivity {
     private ImageView image;
     private SongCursorAdapter adapter;
+    private CrossFadeListener listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         image = (ImageView) findViewById(R.id.image);
+        listener = new CrossFadeListener();
 
         setListAdapter(adapter = new SongCursorAdapter(this, generateSongs()));
     }
@@ -60,8 +66,8 @@ public class MainActivity extends ListActivity {
         getActionBar().setSubtitle(getString(R.string.title_playing, title));
         Glide.with(this)
                 .load(icon)
+                .listener(listener)
                 .placeholder(image.getDrawable())
-                .crossFade(1000)
                 .into(image)
         ;
         adapter.setCurrent(position);
@@ -144,6 +150,31 @@ public class MainActivity extends ListActivity {
                 artist = (TextView) view.findViewById(R.id.artist);
                 title = (TextView) view.findViewById(R.id.title);
             }
+        }
+    }
+
+    private static class CrossFadeListener implements RequestListener<String, GlideDrawable> {
+        Drawable last = null;
+
+        @Override
+        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target,
+                boolean isFromMemoryCache, boolean isFirstResource) {
+            ImageViewTarget<GlideDrawable> image_target = (ImageViewTarget<GlideDrawable>)target;
+            Drawable current = image_target.getCurrentDrawable();
+
+            if (last != null) {
+                TransitionDrawable transitionDrawable = new TransitionDrawable(new Drawable[]{current, resource});
+                transitionDrawable.setCrossFadeEnabled(true);
+                transitionDrawable.startTransition(1000);
+                image_target.setDrawable(transitionDrawable);
+            }
+            last = resource;
+            return true;
         }
     }
 }
