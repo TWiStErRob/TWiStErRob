@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	tools:ignore="HardcodedText"
+	>
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		>
+		<android.support.design.widget.TextInputLayout
+			android:layout_width="50dp"
+			android:layout_height="wrap_content"
+			android:gravity="end"
+			android:hint="quality"
+			>
+			<android.support.design.widget.TextInputEditText
+				android:id="@+id/quality"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="100"
+				android:inputType="number"
+				/>
+		</android.support.design.widget.TextInputLayout>
+		<TextView
+			android:id="@+id/name"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:textIsSelectable="true"
+			android:text="(format, q) means it'll use the quality specified on the left\n(format, *) will generate all 0-100 qualities\nraw files will fail to load in the result preview"
+			tools:text="/storage/emulated/0/Android/data/net.twisterrob.jni/files/0000000000000_name_0000x0000.000.raw"
+			/>
+
+	</LinearLayout>
+
+
+	<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:tools="http://schemas.android.com/tools"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:orientation="horizontal"
+		tools:ignore="HardcodedText"
+		>
+		<ScrollView
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			>
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				>
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Bitmap.getPixels(Raw)"
+					android:onClick="saveRaw"
+					/>
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Bitmap.compress(PNG)"
+					android:onClick="savePNG"
+					/>
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Bitmap.compress(JPG, q)"
+					android:onClick="saveJPEG"
+					/>
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Bitmap.compress(JPEG, *)"
+					android:onClick="saveJPEGAllQuality"
+					/>
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Bitmap.compress(WEBP, q)"
+					android:onClick="saveWEBP"
+					/>
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Bitmap.compress(WEBP, *)"
+					android:onClick="saveWEBPAllQuality"
+					/>
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="NV21 conversion loss"
+					android:onClick="dumpYUV"
+					/>
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="YCbCr conversion loss"
+					android:onClick="dumpYCC"
+					/>
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="YCbCr LibJPEG loss"
+					android:onClick="dumpLibJPEGYCC"
+					/>
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="YuvImage(NV21 JPEG, q)"
+					android:onClick="saveNV21JPEG"
+					/>
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="libjpeg(RGB JPEG, q)"
+					android:onClick="compress"
+					/>
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="navite RGB -> RAW"
+					android:onClick="dumpPixels"
+					/>
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="native test -> libjpeg(JPEG, q)"
+					android:onClick="test"
+					/>
+			</LinearLayout>
+		</ScrollView>
+		<android.support.v4.view.ViewPager
+			android:id="@+id/images"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			>
+			<android.support.v4.view.PagerTitleStrip
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_gravity="top"
+				/>
+			<ImageView
+				android:id="@+id/original"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:scaleType="centerCrop"
+				/>
+			<ImageView
+				android:id="@+id/result"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:scaleType="centerCrop"
+				/>
+		</android.support.v4.view.ViewPager>
+	</LinearLayout>
+</LinearLayout>

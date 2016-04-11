@@ -1,0 +1,101 @@
+buildscript {
+	repositories {
+		jcenter()
+	}
+	dependencies {
+		classpath 'com.android.tools.build:gradle-experimental:0.7.0-alpha5'
+	}
+}
+
+apply plugin: 'com.android.model.application'
+
+model {
+	android {
+		compileSdkVersion 23
+		buildToolsVersion '24.0.0 rc2'
+
+		defaultConfig {
+			applicationId 'net.twisterrob.jpegtest'
+			minSdkVersion.apiLevel 10
+			targetSdkVersion.apiLevel 19
+			versionCode 1
+			versionName '1.0'
+		}
+		ndk {
+			// com.android.build.gradle.managed.NdkBuildType
+			debuggable = true
+			// com.android.build.gradle.managed.NdkConfig
+			platformVersion = 10
+			toolchain = 'gcc'; // gcc | clang
+			toolchainVersion = ''
+			//noinspection UnnecessaryQualifiedReference for code completion
+			com.android.build.gradle.managed.NdkOptions var = it
+			var.moduleName = 'libjpeg_wrapper'
+			var.CFlags.add('-Wall'); var.cppFlags.add('-Wall')
+			var.CFlags.add('-Wextra'); var.cppFlags.add('-Wextra')
+			//var.ldLibs.add('android')
+			var.ldLibs.add('log') // android/log.h
+			var.ldLibs.add('jnigraphics') // android/bitmap.h
+			var.cppFlags.add('-std=c++11') // Add provisions to allow C++11 functionality
+			var.cppFlags.add('-fexceptions') // Enable exception handling
+			var.stl = 'gnustl_shared' // http://developer.android.com/ndk/guides/cpp-support.html
+		}
+	}
+}
+
+repositories {
+	jcenter()
+	ivy {
+		name 'libjpeg'
+		url 'http://www.ijg.org'
+		layout 'pattern', { artifact '/files/[module].[revision].[ext]' }
+	}
+}
+configurations {
+	download // separate configuration so no-one tries to use it
+}
+dependencies {
+	compile 'com.android.support:appcompat-v7:23.3.0'
+	compile 'com.android.support:design:23.3.0'
+	// http://www.ijg.org/files/jpegsrc.v9b.tar.gz see libjpeg ivy repository
+	download 'ijg-libjpeg:jpegsrc:v9b@tar.gz'
+}
+
+// Extract IJG LibJpeg from download dependency instead of checking in to version control
+task extractLibJpeg(type: Copy) {
+	def zipPath = project.configurations.download.find { it.name.startsWith('jpegsrc') }
+	def outputDir = file("${projectDir}/src/main/jni/libjpeg")
+
+	from tarTree(zipPath)
+	into outputDir
+	// all paths must start with */ because the tar.gz file contains a folder
+	include '*/j*.c'
+	include '*/j*.h'
+	include '*/jconfig.txt'
+	rename 'jconfig.txt', 'jconfig.h'
+	// exclude everything else: they're not needed for compilation
+	include '*/README', '*/libjpeg.txt', '*/structure.txt', '*/filelist.txt'
+	doLast {
+		def extractedRoot = outputDir.listFiles()[0]
+		def tree
+		// copy basics
+		tree = project.fileTree(extractedRoot)
+		tree.exclude 'jpegtran*'
+		tree.exclude 'jmem*'
+		tree.copy { into outputDir }
+		// copy specifics
+		tree = fileTree(extractedRoot)
+		tree.include 'jmemmgr.*'
+		tree.include 'jmemsys.*'
+		tree.include 'jmemnobs.*'
+		tree.copy { into outputDir }
+		// clean up
+		extractedRoot.deleteDir()
+	}
+}
+tasks.clean.dependsOn tasks.cleanExtractLibJpeg
+// For Android Studio Gradle Sync
+tasks.whenTaskAdded { if (it.name == 'preBuild') it.dependsOn tasks.extractLibJpeg }
+// For Compilation to be ready whenever needed
+tasks.withType(org.gradle.language.c.tasks.CCompile).whenTaskAdded { it.dependsOn tasks.extractLibJpeg }
+tasks.withType(org.gradle.language.cpp.tasks.CppCompile).whenTaskAdded { it.dependsOn tasks.extractLibJpeg }
