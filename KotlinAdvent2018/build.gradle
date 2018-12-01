@@ -7,35 +7,37 @@ buildscript {
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.10"
 	}
 }
-plugins {
-	id 'java-library'
-}
-apply plugin: 'kotlin'
+
 ext.ver = [
-		kotlin       : '1.3.10',
-		hamcrest2    : '2.0.0.0',
-		junitJupiter : '5.3.2',
+		kotlin      : '1.3.10',
+		hamcrest2   : '2.0.0.0',
+		junitJupiter: '5.3.2',
 ]
 
-repositories {
-	jcenter()
-}
-dependencies { // Kotlin
-	implementation "org.jetbrains.kotlin:kotlin-stdlib:${ver.kotlin}"
-	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${ver.kotlin}"
-	implementation "org.jetbrains.kotlin:kotlin-reflect:${ver.kotlin}"
+subprojects {
+	apply plugin: 'java-library'
+	apply plugin: 'kotlin'
 
-	testImplementation "org.jetbrains.kotlin:kotlin-test:${ver.kotlin}"
-	testImplementation "org.jetbrains.kotlin:kotlin-test-junit:${ver.kotlin}"
-}
+	repositories {
+		jcenter()
+	}
+	dependencies { // Kotlin
+		implementation "org.jetbrains.kotlin:kotlin-stdlib:${ver.kotlin}"
+		implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${ver.kotlin}"
+		implementation "org.jetbrains.kotlin:kotlin-reflect:${ver.kotlin}"
 
-dependencies { // Test
-	testImplementation "org.junit.jupiter:junit-jupiter-api:${ver.junitJupiter}"
-	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${ver.junitJupiter}"
-	testImplementation "org.hamcrest:java-hamcrest:${ver.hamcrest2}"
-}
+		testImplementation "org.jetbrains.kotlin:kotlin-test:${ver.kotlin}"
+		testImplementation "org.jetbrains.kotlin:kotlin-test-junit:${ver.kotlin}"
+	}
 
-tasks.withType(Test) {
-	useJUnitPlatform()
-	testLogging.events("passed", "skipped", "failed")
+	dependencies { // Test
+		testImplementation "org.junit.jupiter:junit-jupiter-api:${ver.junitJupiter}"
+		testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${ver.junitJupiter}"
+		testImplementation "org.hamcrest:java-hamcrest:${ver.hamcrest2}"
+	}
+
+	tasks.withType(Test) {
+		useJUnitPlatform()
+		testLogging.events("passed", "skipped", "failed")
+	}
 }
