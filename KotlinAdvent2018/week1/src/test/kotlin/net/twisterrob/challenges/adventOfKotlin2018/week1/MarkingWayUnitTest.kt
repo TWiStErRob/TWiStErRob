@@ -1,3 +1,5 @@
+package net.twisterrob.challenges.adventOfKotlin2018.week1
+
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
