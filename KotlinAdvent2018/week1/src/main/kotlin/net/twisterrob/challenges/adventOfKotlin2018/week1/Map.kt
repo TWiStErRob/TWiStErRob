@@ -1,11 +1,18 @@
 package net.twisterrob.challenges.adventOfKotlin2018.week1
 
-class Map(val cells: Array<Array<Cell>>) {
+class Map(private val cells: Array<Array<Cell>>) {
 
+	val rows: Int = cells.rows
+	val cols: Int = cells.cols
 	override fun toString() =
 		cells.joinToString("\n") { row ->
 			row.joinToString(separator = "", transform = Cell::format)
 		}
+
+	operator fun get(row: Int, col: Int) = cells[row][col]
+	operator fun set(row: Int, col: Int, value: Cell) {
+		cells[row][col] = value
+	}
 
 	enum class Cell(private val display: Char) {
 		Empty('.'),
@@ -38,5 +45,8 @@ class Map(val cells: Array<Array<Cell>>) {
 			fun parseRow(row: String) = row.map(Map.Cell.Companion::parse).toTypedArray()
 			return Map(cells = rows.map(::parseRow).toTypedArray())
 		}
+
+		private val Array<Array<Cell>>.rows: Int get() = this.size
+		private val Array<Array<Cell>>.cols: Int get() = if (rows != 0) this[0].size else 0
 	}
 }
