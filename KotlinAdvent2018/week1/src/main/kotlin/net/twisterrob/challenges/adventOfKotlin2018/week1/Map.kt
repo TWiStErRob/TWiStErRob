@@ -15,11 +15,11 @@ class Map(private val cells: Array<Array<Cell>>) {
 	}
 
 	enum class Cell(private val display: Char) {
-		Empty('.'),
-		Obstacle('B'),
+		Empty('◌'),
+		Obstacle('■'),
 		Start('S'),
 		End('X'),
-		Path('*');
+		Path('●');
 
 		fun format() = display.toString()
 
