@@ -106,24 +106,14 @@ class AStar(private val map: Map) {
 		}
 	}
 
-	companion object {
-		private val neighborDirections = listOf(
-			-1 to -1, -1 to 0, -1 to +1,
-			0 to -1, /*self,*/ 0 to +1,
-			+1 to -1, +1 to 0, +1 to +1
-		)
-	}
-
 	private fun CellData.neighbors(): Sequence<CellData> {
-		return neighborDirections
-			.asSequence()
-			.map { (rowOffset, colOffset) -> pos.row + rowOffset to pos.col + colOffset }
-			.filter { (row, col) -> row in data.indices && col in data[row].indices }
-			.map { (row, col) -> data[row][col] }
-	}
+		operator fun Pos.plus(offset: Offset) = Pos(this.row + offset.row, this.col + offset.col)
 
-	private fun Map.mark(pos: Pos) {
-		this[pos.row, pos.col] = Path
+		return NEIGHBOR_DIRECTIONS
+			.asSequence()
+			.map { offset -> pos + offset }
+			.filter { pos -> data.isValidPosition(pos) }
+			.map { (row, col) -> data[row][col] }
 	}
 
 	private fun findPositionOf(cell: Cell): CellData {
@@ -138,5 +128,22 @@ class AStar(private val map: Map) {
 			}
 		}
 		return found ?: error("Cannot find $cell")
+	}
+
+	companion object {
+		private data class Offset(val row: Int, val col: Int)
+
+		private val NEIGHBOR_DIRECTIONS = listOf(
+			Offset(-1, -1), Offset(-1, 0), Offset(-1, +1),
+			Offset(0, -1), /* self not included, */ Offset(0, +1),
+			Offset(+1, -1), Offset(+1, 0), Offset(+1, +1)
+		)
+
+		private fun Array<Array<CellData>>.isValidPosition(pos: Pos) =
+			pos.row in this.indices && pos.col in this[pos.row].indices
+
+		private fun Map.mark(pos: Pos) {
+			this[pos.row, pos.col] = Path
+		}
 	}
 }
