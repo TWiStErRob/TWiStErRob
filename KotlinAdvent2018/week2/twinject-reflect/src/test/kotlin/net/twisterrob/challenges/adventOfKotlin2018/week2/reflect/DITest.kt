@@ -6,11 +6,11 @@ import kotlin.test.assertSame
 
 class DITest {
 
-	@Test fun `registerSingleton produces the same value`() {
+	@Test fun `register singleton produces the same value`() {
 		class Dependency
 
 		val inject = (Twinject()){
-			registerSingletonSelf<Dependency>()
+			register(singletonSelf<Dependency>())
 		}
 
 		val dependency1: Dependency = inject()
@@ -19,11 +19,11 @@ class DITest {
 		assertSame(dependency1, dependency2)
 	}
 
-	@Test fun `registerSingleton produces the same value (class object)`() {
+	@Test fun `register singleton produces the same value (class object)`() {
 		class Dependency
 
 		val inject = (Twinject()){
-			registerSingleton(Dependency::class)
+			register(singleton(Dependency::class))
 		}
 
 		val dependency1: Dependency = inject()
@@ -32,12 +32,12 @@ class DITest {
 		assertSame(dependency1, dependency2)
 	}
 
-	@Test fun `registerSingleton produces the same value for provided implementation`() {
+	@Test fun `register singleton produces the same value for provided implementation`() {
 		abstract class Contract
 		class Impl : Contract()
 
 		val inject = (Twinject()){
-			registerSingleton<Contract, Impl>()
+			register(singleton<Contract, Impl>())
 		}
 
 		val dependency1: Contract = inject()

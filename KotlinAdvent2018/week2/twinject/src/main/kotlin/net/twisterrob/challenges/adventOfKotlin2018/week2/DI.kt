@@ -31,7 +31,7 @@ class Twinject {
 	inline operator fun <reified T : Any> getValue(receiver: Any, property: KProperty<*>): T = inject()
 }
 
-inline fun <reified T : Any> Twinject.registerSingleton(noinline provider: () -> T) {
+inline fun <reified T : Any> singleton(noinline provider: () -> T): () -> T {
 	val lazy = lazy { provider() }
-	register { lazy.value }
+	return { lazy.value }
 }

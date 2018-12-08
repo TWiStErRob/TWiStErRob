@@ -6,11 +6,11 @@ import kotlin.test.assertSame
 
 class DITest {
 
-	@Test fun `registerSingleton produces the same value`() {
+	@Test fun `register singleton produces the same value`() {
 		class Dependency
 
 		val inject = (Twinject()){
-			registerSingleton { Dependency() }
+			register(singleton { Dependency() })
 		}
 
 		val dependency1: Dependency = inject()
@@ -19,7 +19,7 @@ class DITest {
 		assertSame(dependency1, dependency2)
 	}
 
-	@Test fun `registerSingleton produces the same value when injected`() {
+	@Test fun `register singleton produces the same value when injected`() {
 		class Dependency
 		class Dependent(
 			inject: Twinject,
@@ -27,7 +27,7 @@ class DITest {
 		)
 
 		val inject = (Twinject()){
-			registerSingleton { Dependency() }
+			register(singleton { Dependency() })
 			register { Dependent(this) }
 		}
 
