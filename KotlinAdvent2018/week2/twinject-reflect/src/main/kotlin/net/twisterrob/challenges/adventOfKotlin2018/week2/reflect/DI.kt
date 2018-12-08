@@ -6,11 +6,11 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 import kotlin.reflect.jvm.jvmErasure
 
-inline fun <reified T : Any> Twinject.registerSelf() {
+inline fun <reified T : Any> Twinject.register() {
 	register(T::class)
 }
 
-inline fun <reified T : Any, reified T2 : T> Twinject.register() {
+inline fun <reified T : Any, reified T2 : T> Twinject.registerContract() {
 	register<T>(T2::class)
 }
 
@@ -18,10 +18,10 @@ inline fun <reified T : Any> Twinject.register(impl: KClass<out T>) {
 	register(T::class, ReflectiveCreator(this, impl))
 }
 
-inline fun <reified T : Any> Twinject.singletonSelf() =
+inline fun <reified T : Any> Twinject.singleton() =
 	singleton(T::class)
 
-inline fun <reified T : Any, reified T2 : T> Twinject.singleton() =
+inline fun <reified T : Any, reified T2 : T> Twinject.singletonContract() =
 	singleton<T>(T2::class)
 
 inline fun <reified T : Any> Twinject.singleton(impl: KClass<out T>) =

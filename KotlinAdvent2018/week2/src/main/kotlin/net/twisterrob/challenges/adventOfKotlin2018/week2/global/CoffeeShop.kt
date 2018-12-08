@@ -2,13 +2,13 @@ package net.twisterrob.challenges.adventOfKotlin2018.week2.global
 
 import net.twisterrob.challenges.adventOfKotlin2018.week2.Twinject
 import net.twisterrob.challenges.adventOfKotlin2018.week2.reflect.register
-import net.twisterrob.challenges.adventOfKotlin2018.week2.reflect.registerSelf
+import net.twisterrob.challenges.adventOfKotlin2018.week2.reflect.registerContract
 
 val inject = (Twinject()) {
 	// reflective creation (same type)
-	registerSelf<CoffeeMaker>()
+	register<CoffeeMaker>()
 	// reflective creation (super type)
-	register<Pump, Thermosiphon>()
+	registerContract<Pump, Thermosiphon>()
 	// custom creation
 	register<Heater> { EletrictHeater() }
 }

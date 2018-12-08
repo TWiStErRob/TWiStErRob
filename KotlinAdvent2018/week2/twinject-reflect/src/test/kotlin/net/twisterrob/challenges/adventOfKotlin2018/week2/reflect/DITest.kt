@@ -10,7 +10,7 @@ class DITest {
 		class Dependency
 
 		val inject = (Twinject()){
-			register(singletonSelf<Dependency>())
+			register(singleton<Dependency>())
 		}
 
 		val dependency1: Dependency = inject()
@@ -37,7 +37,7 @@ class DITest {
 		class Impl : Contract()
 
 		val inject = (Twinject()){
-			register(singleton<Contract, Impl>())
+			register(singletonContract<Contract, Impl>())
 		}
 
 		val dependency1: Contract = inject()
