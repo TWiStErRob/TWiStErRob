@@ -1,7 +1,19 @@
-apply plugin: 'application'
-
-mainClassName = "net.twisterrob.challenges.adventOfKotlin2018.week2.CoffeeShopKt"
-
 dependencies {
 	implementation project('twinject')
+	implementation project('twinject-reflect')
+}
+
+task runGlobal(type: JavaExec) {
+	main = "net.twisterrob.challenges.adventOfKotlin2018.week2.global.CoffeeShopKt"
+	classpath = sourceSets.main.runtimeClasspath
+}
+
+task runInstantiate(type: JavaExec) {
+	main = "net.twisterrob.challenges.adventOfKotlin2018.week2.instantiate.CoffeeShopKt"
+	classpath = sourceSets.main.runtimeClasspath
+}
+
+task runNoReflect(type: JavaExec) {
+	main = "net.twisterrob.challenges.adventOfKotlin2018.week2.noreflect.CoffeeShopKt"
+	classpath = sourceSets.main.runtimeClasspath
 }

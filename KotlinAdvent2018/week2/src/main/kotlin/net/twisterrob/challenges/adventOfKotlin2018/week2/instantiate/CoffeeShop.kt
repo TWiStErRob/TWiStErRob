@@ -1,10 +1,17 @@
-package net.twisterrob.challenges.adventOfKotlin2018.week2
+package net.twisterrob.challenges.adventOfKotlin2018.week2.instantiate
+
+import net.twisterrob.challenges.adventOfKotlin2018.week2.Twinject
+import net.twisterrob.challenges.adventOfKotlin2018.week2.reflect.register
+import net.twisterrob.challenges.adventOfKotlin2018.week2.reflect.registerSelf
 
 fun main(args: Array<String>) {
 	val injection = (Twinject()) {
-		register<Pump> { Thermosiphon(this) }
+		// reflective creation (same type)
+		registerSelf<CoffeeMaker>()
+		// reflective creation (super type)
+		register<Pump, Thermosiphon>()
+		// custom creation
 		register<Heater> { EletrictHeater() }
-		register() { CoffeeMaker(this) }
 	}
 
 	val maker: CoffeeMaker = injection()
@@ -43,5 +50,7 @@ class CoffeeMaker(
 }
 
 class EletrictHeater : Heater {
-	override fun heat() = println("~ ~ ~ heating ~ ~ ~")
+	override fun heat() {
+		println("~ ~ ~ heating ~ ~ ~")
+	}
 }

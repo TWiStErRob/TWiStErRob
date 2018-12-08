@@ -1,0 +1,4 @@
+dependencies {
+	api project(":week2:twinject")
+	api "org.jetbrains.kotlin:kotlin-reflect:${ver.kotlin}"
+}
