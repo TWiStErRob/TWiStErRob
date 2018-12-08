@@ -8,6 +8,19 @@ class DITest {
 
 	@Test fun `registerSingleton produces the same value`() {
 		class Dependency
+
+		val inject = (Twinject()){
+			registerSingleton { Dependency() }
+		}
+
+		val dependency1: Dependency = inject()
+		val dependency2: Dependency = inject()
+
+		assertSame(dependency1, dependency2)
+	}
+
+	@Test fun `registerSingleton produces the same value when injected`() {
+		class Dependency
 		class Dependent(
 			inject: Twinject,
 			val dep: Dependency = inject()
