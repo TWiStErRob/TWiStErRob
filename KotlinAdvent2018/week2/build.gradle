@@ -1,0 +1,7 @@
+apply plugin: 'application'
+
+mainClassName = "net.twisterrob.challenges.adventOfKotlin2018.week2.CoffeeShopKt"
+
+dependencies {
+	implementation project('twinject')
+}
