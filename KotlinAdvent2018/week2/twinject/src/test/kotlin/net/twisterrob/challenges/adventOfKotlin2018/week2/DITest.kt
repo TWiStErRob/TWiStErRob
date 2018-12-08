@@ -3,6 +3,7 @@ package net.twisterrob.challenges.adventOfKotlin2018.week2
 import org.junit.jupiter.api.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertNotSame
+import kotlin.test.assertNull
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
@@ -61,6 +62,41 @@ class DITest {
 
 		dependency.dep
 	}
+
+	@Test fun `inject provided nullable object to nullable`() {
+		class Dependency
+
+		val inject = (Twinject()){
+			registerNullable { Dependency() }
+		}
+
+		val dependency: Dependency? = inject.injectNullable()
+
+		assertNotNull(dependency)
+	}
+
+	@Test fun `inject provided null to nullable`() {
+		class Dependency
+
+		val inject = (Twinject()){
+			registerNullable<Dependency> { null }
+		}
+
+		val dependency: Dependency? = inject.injectNullable()
+
+		assertNull(dependency)
+	}
+
+// does not compile, and that's a good protection
+//	@Test fun `inject provided null to non-null`() {
+//		class Dependency
+//
+//		val inject = (Twinject()){
+//			registerNullable<Dependency> { null }
+//		}
+//
+//		val dependency: Dependency = inject.injectNullable()
+//	}
 
 	@Test fun `register singleton produces the same value`() {
 		class Dependency
