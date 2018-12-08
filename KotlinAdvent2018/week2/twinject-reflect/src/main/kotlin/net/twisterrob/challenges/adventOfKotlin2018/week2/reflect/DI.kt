@@ -14,18 +14,18 @@ inline fun <reified T : Any, reified T2 : T> Twinject.register() {
 }
 
 inline fun <reified T : Any> Twinject.register(impl: KClass<out T>) {
-	register(T::class) { ReflectiveCreator(this, impl)() } // TODO ReflectiveCreator is not () -> T
+	register(T::class, ReflectiveCreator(this, impl))
 }
 
 class ReflectiveCreator<T : Any>(
 	private val inject: Twinject,
 	private val impl: KClass<T>
-) {
+) : Function0<T> {
 
 	private val <T> KFunction<T>.isInjectable: Boolean
 		get() = parameters.all { it.type.jvmErasure == Twinject::class || it.isOptional }
 
-	operator fun invoke(): T {
+	override operator fun invoke(): T {
 		val ctor = impl.constructors.single { it.isInjectable }
 		@Suppress("USELESS_CAST") // make type inference more general
 		val args = ctor.parameters
