@@ -98,13 +98,7 @@ class AStar(private val map: Map) {
 		}
 	}
 
-	private fun CellData.backtrackPathToStart() = sequence<CellData> {
-		var current: CellData? = this@backtrackPathToStart
-		while (current != null) {
-			yield(current)
-			current = current.parent
-		}
-	}
+	private fun CellData.backtrackPathToStart() = generateSequence(this) { it.parent }
 
 	private fun CellData.neighbors(): Sequence<CellData> {
 		operator fun Pos.plus(offset: Offset) = Pos(this.row + offset.row, this.col + offset.col)

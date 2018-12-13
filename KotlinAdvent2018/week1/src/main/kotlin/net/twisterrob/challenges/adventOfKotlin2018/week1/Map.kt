@@ -37,7 +37,7 @@ class Map(private val cells: Array<Array<Cell>>) {
 			check(rowCount != 0) {
 				"No rows in input map"
 			}
-			val columnCount = rows[0].length
+			val columnCount = rows.first().length
 			check(rows.all { it.length == columnCount }) {
 				"Map not rectangular: not all rows have the same column count: " + rows.filter { it.length != columnCount }
 			}
@@ -47,6 +47,6 @@ class Map(private val cells: Array<Array<Cell>>) {
 		}
 
 		private val Array<Array<Cell>>.rows: Int get() = this.size
-		private val Array<Array<Cell>>.cols: Int get() = if (rows != 0) this[0].size else 0
+		private val Array<Array<Cell>>.cols: Int get() = firstOrNull()?.size ?: 0
 	}
 }
