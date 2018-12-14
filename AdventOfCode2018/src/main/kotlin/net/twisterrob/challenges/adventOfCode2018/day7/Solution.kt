@@ -31,27 +31,43 @@ fun solve(vararg partConstraints: Pair<Char, Char>): String =
  * @see [https://en.wikipedia.org/wiki/Topological_sorting#Kahn's_algorithm]
  */
 private fun findOrder(vararg edges: Pair<Char, Char>): List<Char> {
-    val graph = mutableSetOf(*edges)
-    val L = mutableListOf<Char>()
-    val S = graph
-        .flatMap { listOf(it.first, it.second) }
-        .filterNot { node -> graph.any { it.second == node } }
-        .toSortedSet()
-    while (S.isNotEmpty()) {
-        val node = S.first()
-        S -= node
-        L += node
-        val nextEdge = graph.filter { it.first == node }
-        nextEdge.forEach { (n, m) ->
-            graph -= n to m
-            if (graph.count { it.second == m } == 0) {
-                S += m
+
+    class Graph(vararg edges: Pair<Char, Char>) {
+        private val graph = mutableSetOf(*edges)
+
+        operator fun minusAssign(edge: Pair<Char, Char>) {
+            graph -= edge
+        }
+
+        fun hasIncomingEdges(node: Char) = graph.any { it.second == node }
+
+        // this blows up the O complexity, but the solvable input is small
+        fun dependentsFrom(node: Char) = graph.filter { it.first == node }
+
+        fun hasAnyEdges() = graph.isNotEmpty()
+    }
+
+    val graph = Graph(*edges)
+    val allNodes = edges.flatMap { listOf(it.first, it.second) }.toSet()
+    // SortedSet to satisfy "If more than one step is ready, choose the step which is first alphabetically."
+    val possibleNextNodes = allNodes.filterNot(graph::hasIncomingEdges).toSortedSet()
+
+    val result = mutableListOf<Char>()
+    while (possibleNextNodes.isNotEmpty()) {
+        val node = possibleNextNodes.first()
+        possibleNextNodes -= node
+        result += node
+        val nextEdges = graph.dependentsFrom(node)
+        nextEdges.forEach { edge ->
+            graph -= edge
+            if (!graph.hasIncomingEdges(edge.second)) {
+                possibleNextNodes += edge.second
             }
         }
     }
-    if (graph.isNotEmpty()) {
+    if (graph.hasAnyEdges()) {
         error("cycle")
     } else {
-        return L
+        return result
     }
 }
