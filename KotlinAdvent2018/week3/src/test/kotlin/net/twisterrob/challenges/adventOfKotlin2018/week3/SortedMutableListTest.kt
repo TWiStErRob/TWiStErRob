@@ -9,9 +9,9 @@ import kotlin.test.assertTrue
  * [Task](https://blog.kotlin-academy.com/advent-of-kotlin-week-3-sortedlist-2ff49c250aad)
  * [Source](https://gist.github.com/MarcinMoskala/db871b802ca4c05b0f1c84125dbcdf3f)
  */
-class SortedListTest {
+class SortedMutableListTest {
 
-	fun <T> assertCollectionEquals(c1: Iterable<T>, c2: Iterable<T>) {
+	private fun <T> assertCollectionEquals(c1: Iterable<T>, c2: Iterable<T>) {
 		for ((e1, e2) in c1 zip c2) {
 			assertEquals(e1, e2, "Collection $c1 is not equal to $c2")
 		}
@@ -85,7 +85,7 @@ class SortedListTest {
 
 	@Test
 	fun `Contains should do around log2(size) checks`() {
-		var numbers = (1..100000).map { Random.nextInt(10_000_000) }
+		val numbers = (1..100000).map { Random.nextInt(10_000_000) }
 
 		var comparatorCounter = 0
 		val comparator = Comparator<Int> { t1, t2 ->
@@ -106,9 +106,9 @@ class SortedListTest {
 
 	@Test
 	fun `Sorting is correct`() {
-		var numbers = (1..1000).map { Random.nextInt(10_000_000) }
+		val numbers = (1..1000).map { Random.nextInt(10_000_000) }
 		val tree = sortedMutableListOf<Int>().apply {
-			for(num in numbers) add(num)
+			for (num in numbers) add(num)
 		}
 
 		assertCollectionEquals(tree, numbers.sorted())
