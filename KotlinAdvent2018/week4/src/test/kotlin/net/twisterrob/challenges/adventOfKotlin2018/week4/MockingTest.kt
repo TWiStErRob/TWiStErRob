@@ -3,8 +3,10 @@ package net.twisterrob.challenges.adventOfKotlin2018.week4
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import kotlin.test.fail
 
 /**
  * [Task](https://blog.kotlin-academy.com/advent-of-kotlin-week-4-mocking-cde699ec9963)
@@ -29,7 +31,7 @@ class MockingTest {
 		fun `can call toString() on a mock`() {
 			val result = mock.toString()
 
-			assertEquals("${mock::class.java}@${System.identityHashCode(mock).toString(16)}", result)
+			assertEquals("${mock::class.java.name}@${System.identityHashCode(mock).toString(16)}", result)
 		}
 
 		@Test
@@ -47,24 +49,91 @@ class MockingTest {
 		}
 	}
 
+	@Nested
+	inner class Errors {
+
+		private val mock: Example = mock()
+
+		private inline fun <reified T : Throwable> assertExceptionMessageStartsWith(
+			message: String, crossinline actions: () -> Unit
+		) {
+			val ex = assertFailsWith<T> {
+				actions()
+			}
+			if (!ex.message!!.startsWith(message)) {
+				fail("`$ex` does not start with `$message`")
+			}
+		}
+
+		@Test fun `nested setReturnValue`() {
+			assertExceptionMessageStartsWith<IllegalStateException>("Already recording") {
+				setReturnValue({
+					setReturnValue({ mock.getInt() }, 2)
+					mock.getInt()
+				}, 1)
+			}
+		}
+
+		@Test fun `nested setBody`() {
+			assertExceptionMessageStartsWith<IllegalStateException>("Already recording") {
+				setBody({
+					setBody({ mock.getInt() }, { 2 })
+					mock.getInt()
+				}, { 1 })
+			}
+		}
+
+		@Test fun `setBody in setReturnValue`() {
+			assertExceptionMessageStartsWith<IllegalStateException>("Already recording") {
+				setReturnValue({
+					setBody({ mock.getInt() }, { 2 })
+					mock.getInt()
+				}, 1)
+			}
+		}
+
+		@Test fun `setReturnValue in setBody`() {
+			assertExceptionMessageStartsWith<IllegalStateException>("Already recording") {
+				setBody({
+					setReturnValue({ mock.getInt() }, 2)
+					mock.getInt()
+				}, { 1 })
+			}
+		}
+
+		@Test fun `missing behavior`() {
+			assertExceptionMessageStartsWith<IllegalStateException>("No matching stub found") {
+				mock.getInt()
+			}
+		}
+
+		@Test fun `multiple behavior`() {
+			setReturnValue({ mock.getInt() }, 1)
+			setReturnValue({ mock.getInt() }, 2)
+			assertExceptionMessageStartsWith<IllegalStateException>("Multiple matching stubs found") {
+				mock.getInt()
+			}
+		}
+	}
+
 	@Test
 	fun `can set return value of a simple call`() {
-		val a: Example = mock()
+		val mock: Example = mock()
 
-		setReturnValue({ a.getInt() }, 2)
+		setReturnValue({ mock.getInt() }, 2)
 
-		assertEquals(2, a.getInt())
+		assertEquals(2, mock.getInt())
 	}
 
 	@Test
 	fun `can set behavior a simple call`() {
 		var i = 1
-		val b: Example = mock()
+		val mock: Example = mock()
 
-		setBody({ b.getInt() }, { i++ })
+		setBody({ mock.getInt() }) { i++ }
 
-		assertEquals(1, b.getInt())
-		assertEquals(2, b.getInt())
-		assertEquals(3, b.getInt())
+		assertEquals(1, mock.getInt())
+		assertEquals(2, mock.getInt())
+		assertEquals(3, mock.getInt())
 	}
 }
