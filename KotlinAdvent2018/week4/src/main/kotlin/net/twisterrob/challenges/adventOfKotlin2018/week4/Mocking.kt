@@ -26,19 +26,20 @@ fun <T> setBody(call: () -> T, behavior: () -> T) {
 	}
 }
 
-internal data class Call(
+internal class Stub(
 	private val method: Method,
-	private val args: List<Any?>
+	private val args: Array<Any?>,
+	private val response: () -> Any?
 ) {
 
-	override fun toString() =
-		"${method.name}(${args.joinToString()})"
-}
+	operator fun invoke(): Any? = response()
 
-internal class Stub(
-	val call: Call,
-	val response: () -> Any?
-)
+	override fun toString() =
+		"${method.name}(${args.joinToString()}) = ${response}"
+
+	fun matches(method: Method, args: Array<Any?>): Boolean =
+		this.method == method && this.args.asList() == args.asList()
+}
 
 class MockInvocationHandler : KInvocationHandler {
 
@@ -52,7 +53,7 @@ class MockInvocationHandler : KInvocationHandler {
 		require(this.proxy === proxy) {
 			"Each ${MockInvocationHandler::class} handles a single mock target only."
 		}
-		val call = Call(method, args.asList())
+		val call = "${method.name}(${args.joinToString()})"
 		when (behaviorToRecord) {
 			NOT_RECORDING -> when {
 				method.declaringClass == Object::class.java -> {
@@ -62,18 +63,18 @@ class MockInvocationHandler : KInvocationHandler {
 
 				else -> {
 					println("Responding for $this.$call")
-					val matchingStubs = stubs.filter { it.call == call }
+					val matchingStubs = stubs.filter { it.matches(method, args) }
 					when (matchingStubs.size) {
-						0 -> error("No matching stub found for $call\n" + describe(call))
-						1 -> return stubs.single().response()
-						else -> error("Multiple matching stubs found for $call\n" + describe(call))
+						0 -> error("No matching stub found for $call\n" + describe(method, args))
+						1 -> return stubs.single().invoke()
+						else -> error("Multiple matching stubs found for $call\n" + describe(method, args))
 					}
 				}
 			}
 
 			else -> {
 				println("Recording $this.$call as $behaviorToRecord")
-				stubs += Stub(call, behaviorToRecord)
+				stubs += Stub(method, args, behaviorToRecord)
 				return method.returnType.defaultValueForReflection()
 					.also { behaviorToRecord = NOT_RECORDING }
 			}
@@ -86,17 +87,15 @@ class MockInvocationHandler : KInvocationHandler {
 		return "$name+$hash"
 	}
 
-	private fun describe(call: Call) = buildString {
+	private fun describe(method: Method, args: Array<Any?>) = buildString {
 		if (stubs.isEmpty()) {
 			append("No stubs")
 		} else {
 			stubs.forEach { stub ->
-				if (stub.call == call) {
+				if (stub.matches(method, args)) {
 					append("MATCHES ")
 				}
-				append(stub.call)
-				append(" = ")
-				append(stub.response)
+				append(stub)
 				append('\n')
 			}
 		}
