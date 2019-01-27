@@ -1,0 +1,13 @@
+pluginManagement {
+	resolutionStrategy {
+		eachPlugin {
+			if ((requested.id.namespace ?: '').startsWith("org.jetbrains.kotlin")) {
+				// simulate `plugins { id 'org.jetbrains.kotlin.jvm' version project.properties.kotlin_version }`
+				// https://github.com/gradle/gradle/issues/1697
+				useVersion kotlin_version
+			}
+		}
+	}
+}
+
+rootProject.name = 'JFixturePlayground'
