@@ -26,18 +26,21 @@ fun <T> setBody(call: () -> T, behavior: () -> T) {
 	}
 }
 
+private fun Method.toCallString(vararg args: Any?) =
+	"${this.name}(${args.joinToString()})"
+
 internal class Stub(
 	private val method: Method,
-	private val args: Array<Any?>,
+	private val args: Array<out Any?>,
 	private val response: () -> Any?
 ) {
 
 	operator fun invoke(): Any? = response()
 
 	override fun toString() =
-		"${method.name}(${args.joinToString()}) = ${response}"
+		"${method.toCallString(*args)} = ${response}"
 
-	fun matches(method: Method, args: Array<Any?>): Boolean =
+	fun matches(method: Method, vararg args: Any?): Boolean =
 		this.method == method && this.args.asList() == args.asList()
 }
 
@@ -53,46 +56,52 @@ class MockInvocationHandler : KInvocationHandler {
 		require(this.proxy === proxy) {
 			"Each ${MockInvocationHandler::class} handles a single mock target only."
 		}
-		val call = "${method.name}(${args.joinToString()})"
-		when (behaviorToRecord) {
+		return when (behaviorToRecord) {
 			NOT_RECORDING -> when {
-				method.declaringClass == Object::class.java -> {
-					println("$this.$call")
-					return invokeObjectMethod(method, proxy, args)
-				}
-
-				else -> {
-					println("Responding for $this.$call")
-					val matchingStubs = stubs.filter { it.matches(method, args) }
-					when (matchingStubs.size) {
-						0 -> error("No matching stub found for $call\n" + describe(method, args))
-						1 -> return stubs.single().invoke()
-						else -> error("Multiple matching stubs found for $call\n" + describe(method, args))
-					}
-				}
+				method.declaringClass == Object::class.java ->
+					invokeObjectMethod(method, proxy, *args)
+				else ->
+					respondWithStubbing(method, *args)
 			}
-
-			else -> {
-				println("Recording $this.$call as $behaviorToRecord")
-				stubs += Stub(method, args, behaviorToRecord)
-				return method.returnType.defaultValueForReflection()
-					.also { behaviorToRecord = NOT_RECORDING }
-			}
+			else ->
+				recordStubbing(method, *args)
 		}
+	}
+
+	private fun respondWithStubbing(method: Method, vararg args: Any?): Any? {
+		log(method, *args) { "Responding for $it" }
+		val matchingStubs = stubs.filter { it.matches(method, *args) }
+		when (matchingStubs.size) {
+			0 -> error("No matching stub found for ${method.toCallString(args)}\n" + describe(method, *args))
+			1 -> return stubs.single().invoke()
+			else -> error("Multiple matching stubs found for ${method.toCallString(args)}\n" + describe(method, *args))
+		}
+	}
+
+	private fun recordStubbing(method: Method, vararg args: Any?): Any? {
+		log(method, *args) { "Recording $it as $behaviorToRecord" }
+		stubs += Stub(method, args, behaviorToRecord)
+		return method.returnType.defaultValueForReflection()
+			.also { behaviorToRecord = NOT_RECORDING }
+	}
+
+	private fun log(method: Method, vararg args: Any?, message: (call: String) -> String) {
+		val call = "$this.${method.toCallString(*args)}"
+		println(message(call))
 	}
 
 	override fun toString(): String {
 		val name = MockInvocationHandler::class.java.simpleName
-		val hash = System.identityHashCode(proxy).toString(16)
+		val hash = System.identityHashCode(proxy).toString(16).padStart(8, '0')
 		return "$name+$hash"
 	}
 
-	private fun describe(method: Method, args: Array<Any?>) = buildString {
+	private fun describe(method: Method, vararg args: Any?) = buildString {
 		if (stubs.isEmpty()) {
 			append("No stubs")
 		} else {
 			stubs.forEach { stub ->
-				if (stub.matches(method, args)) {
+				if (stub.matches(method, * args)) {
 					append("MATCHES ")
 				}
 				append(stub)
@@ -101,8 +110,9 @@ class MockInvocationHandler : KInvocationHandler {
 		}
 	}
 
-	private fun invokeObjectMethod(method: Method, proxy: Any, args: Array<Any?>): Any =
-		when (method) {
+	private fun invokeObjectMethod(method: Method, proxy: Any, vararg args: Any?): Any {
+		log(method, *args) { "Invoking Object method: $it" }
+		return when (method) {
 			Object::class.java.getDeclaredMethod("toString") ->
 				"${proxy::class.java.canonicalName}@${System.identityHashCode(proxy).toString(16)}"
 			Object::class.java.getDeclaredMethod("hashCode") ->
@@ -111,4 +121,5 @@ class MockInvocationHandler : KInvocationHandler {
 				proxy === args[0]
 			else -> error("Unhandled Object method: $method")
 		}
+	}
 }
