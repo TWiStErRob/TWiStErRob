@@ -26,3 +26,17 @@ inline operator fun <reified T> JFixture.invoke(): T =
 		else ->
 			create(T::class.java)
 	}
+
+@Suppress("UNCHECKED_CAST") // can't have List<T>::class literal, so need to cast
+inline fun <reified T : Any> JFixture.createList(size: Int = 3): List<T> =
+	this.collections().createCollection(List::class.java as Class<List<T>>, T::class.java, size)
+
+inline fun <reified E : Enum<E>> Enum.Companion.valuesExcluding(vararg excluded: E): Array<E> =
+	(enumValues<E>().toList() - excluded).toTypedArray()
+
+fun Any.setField(name: String, value: Any?) {
+	this::class.java.getDeclaredField(name).apply {
+		isAccessible = true
+		set(this@setField, value)
+	}
+}
