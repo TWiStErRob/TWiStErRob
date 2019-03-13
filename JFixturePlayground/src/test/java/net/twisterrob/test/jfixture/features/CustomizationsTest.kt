@@ -1,6 +1,7 @@
 package net.twisterrob.test.jfixture.features
 
 import com.flextrade.jfixture.JFixture
+import net.twisterrob.test.jfixture.invoke
 import org.junit.jupiter.api.Test
 import java.lang.Math.random
 import kotlin.math.roundToInt

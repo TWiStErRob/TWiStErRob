@@ -1,7 +1,7 @@
 package net.twisterrob.test.jfixture.examples.journey
 
 import com.flextrade.jfixture.JFixture
-import net.twisterrob.test.jfixture.features.invoke
+import net.twisterrob.test.jfixture.invoke
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.RepeatedTest

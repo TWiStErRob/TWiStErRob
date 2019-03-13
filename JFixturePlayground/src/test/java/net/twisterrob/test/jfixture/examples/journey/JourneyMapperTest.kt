@@ -1,11 +1,11 @@
 package net.twisterrob.test.jfixture.examples.journey
 
 import com.flextrade.jfixture.JFixture
+import net.twisterrob.test.jfixture.createList
 import net.twisterrob.test.jfixture.examples.journey.TransportMode.TRAIN
-import net.twisterrob.test.jfixture.features.createList
-import net.twisterrob.test.jfixture.features.invoke
-import net.twisterrob.test.jfixture.features.setField
-import net.twisterrob.test.jfixture.features.valuesExcluding
+import net.twisterrob.test.jfixture.invoke
+import net.twisterrob.test.jfixture.setField
+import net.twisterrob.test.jfixture.valuesExcluding
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -59,7 +59,6 @@ class JourneyMapperTest {
 
 		assertThat(result.trainOnly, equalTo(true))
 	}
-
 
 	@Test fun `trainOnly is true for a TRAIN-only journey v3`() {
 		fixture.customise().intercept(Leg::class.java) {

@@ -4,7 +4,7 @@ import com.flextrade.jfixture.JFixture
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import net.twisterrob.test.jfixture.features.invoke
+import net.twisterrob.test.jfixture.invoke
 import org.junit.jupiter.api.Test
 
 class JourneyPresenterTest {

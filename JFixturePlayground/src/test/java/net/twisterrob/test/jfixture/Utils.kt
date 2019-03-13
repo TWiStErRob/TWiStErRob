@@ -1,4 +1,4 @@
-package net.twisterrob.test.jfixture.features
+package net.twisterrob.test.jfixture
 
 import com.flextrade.jfixture.JFixture
 import com.flextrade.jfixture.utility.SpecimenType
