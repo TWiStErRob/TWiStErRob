@@ -6,7 +6,10 @@ data class Journey(
 	val id: String,
 	val legs: List<Leg>,
 	val passengers: List<Passenger>
-)
+) {
+
+	val changeCount get () = legs.size - 1
+}
 
 data class Leg(
 	val origin: Stop,

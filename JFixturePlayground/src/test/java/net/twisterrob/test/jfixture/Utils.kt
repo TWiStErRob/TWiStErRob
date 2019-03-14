@@ -8,10 +8,10 @@ import com.flextrade.jfixture.utility.SpecimenType
 fun <T> JFixture.create(clazz: Class<T>): T = create(clazz)
 // val fixtString: String = fixture.create(String::class.java)
 
-inline fun <reified T> JFixture.create(): T = create(T::class.java)
-// val fixtString: String = fixture.create<String>()
-// val fixtString/*: String*/ = fixture.create<String>()
-// val fixtString: String = fixture.create()
+inline fun <reified T> JFixture.build(): T = create(T::class.java)
+// val fixtString: String = fixture.build<String>()
+// val fixtString/*: String*/ = fixture.build<String>()
+// val fixtString: String = fixture.build()
 
 inline fun <reified T> JFixture.invoke(): T = create(T::class.java)
 // val fixtString: String = fixture.invoke()
