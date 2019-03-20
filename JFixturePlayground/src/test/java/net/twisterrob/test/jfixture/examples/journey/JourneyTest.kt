@@ -10,7 +10,10 @@ import org.junit.jupiter.api.Test
 class JourneyTest {
 
 	@RepeatedTest(100) fun `two journeys are better than one`() {
-		val twoJourneys = setOf(journey().addLeg().finish().build(), journey().addLeg().finish().build())
+		val twoJourneys = setOf(
+			JourneyBuilder().addLeg(LegBuilder().build()).build(),
+			JourneyBuilder().addLeg(LegBuilder().build()).build()
+		)
 		assertThat(twoJourneys, hasSize(2))
 	}
 
