@@ -5,7 +5,6 @@ import net.twisterrob.test.jfixture.invoke
 import org.hamcrest.Matchers.emptyString
 import org.hamcrest.Matchers.not
 import org.hamcrest.junit.MatcherAssert.assertThat
-import org.junit.Before
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.MethodOrderer.Random
 import org.junit.jupiter.api.Test
@@ -67,6 +66,7 @@ class NonSharedStateTest {
 		assertThat(fixture<String>(), not(emptyString()))
 	}
 }
+
 class MyFixture : JFixture() {
 	init {
 		customise().useSubType(CharSequence::class.java, String::class.java)

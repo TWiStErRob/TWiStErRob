@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.flextrade.jfixture.JFixture;
-import com.flextrade.jfixture.customisation.TracingCustomisation;
 
 public class SimpleDataTest {
 
