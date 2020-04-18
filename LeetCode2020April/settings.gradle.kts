@@ -1,0 +1,5 @@
+include(":week1")
+include(":week2")
+include(":week3")
+include(":week4")
+include(":week5")
