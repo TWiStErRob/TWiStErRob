@@ -30,9 +30,6 @@ subprojects {
 	dependencies { // Kotlin
 		implementation("org.jetbrains.kotlin:kotlin-stdlib:${ver.kotlin}")
 		implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${ver.kotlin}")
-
-		testImplementation("org.jetbrains.kotlin:kotlin-test:${ver.kotlin}")
-		testImplementation("org.jetbrains.kotlin:kotlin-test-junit:${ver.kotlin}")
 	}
 
 	dependencies { // Test
