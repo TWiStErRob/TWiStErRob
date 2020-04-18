@@ -33,7 +33,11 @@ class SolutionTest {
 
 	@TestFactory fun `edge cases`() = arrayOf(
 		solutionTest("", expectedValid = true),
-		solutionTest(")(", expectedValid = true),
+		solutionTest(")(", expectedValid = false),
+		// Complex test case that failed
+		solutionTest("(())((())()()(*)(*()(())())())()()((()())((()))(*", expectedValid = false),
+		// Above simplified: violates 3.
+		solutionTest("**((*", expectedValid = false),
 	)
 
 	@TestFactory fun missingLeft() = arrayOf(
@@ -51,12 +55,12 @@ class SolutionTest {
 	)
 
 	@TestFactory fun onlyStars() = arrayOf(
-		solutionTest("*".repeat(1), expectedValid = false),
+		solutionTest("*".repeat(1), expectedValid = true),
 		solutionTest("*".repeat(2), expectedValid = true),
 		solutionTest("*".repeat(100), expectedValid = true),
 		solutionTest("*".repeat(32), expectedValid = true),
-		solutionTest("*".repeat(31), expectedValid = false),
-		solutionTest("*".repeat(33), expectedValid = false),
+		solutionTest("*".repeat(31), expectedValid = true),
+		solutionTest("*".repeat(33), expectedValid = true),
 	)
 
 	@TestFactory fun starsComplete() = arrayOf(
@@ -68,5 +72,20 @@ class SolutionTest {
 		solutionTest("(()*", expectedValid = true),
 		solutionTest("*)()", expectedValid = true),
 		solutionTest("()(*", expectedValid = true),
+		solutionTest("***)(***", expectedValid = true),
+		solutionTest("***)(****", expectedValid = true),
+		solutionTest("****)(***", expectedValid = true),
+		solutionTest("****)(****", expectedValid = true),
+	)
+
+	@TestFactory fun starsAdjacent() = arrayOf(
+		solutionTest("****()", expectedValid = true),
+		solutionTest("()****", expectedValid = true),
+		solutionTest("***()", expectedValid = true),
+		solutionTest("()***", expectedValid = true),
+		solutionTest("*****()*****", expectedValid = true),
+		solutionTest("******()******", expectedValid = true),
+		solutionTest("****()***", expectedValid = true),
+		solutionTest("***()****", expectedValid = true),
 	)
 }

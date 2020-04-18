@@ -4,16 +4,32 @@ class Solution {
 	/**
 	 * @param s length `[1, 100]`, valid characters = `()*`
 	 */
-	@OptIn(ExperimentalStdlibApi::class)
 	fun checkValidString(s: String): Boolean {
-		val result = s.scan(0) { acc, curr ->
-			return@scan when (curr) {
-				'(' -> acc + 1
-				')' -> acc - 1
-				'*' -> acc
+		var acc = 0
+		var jokers = 0
+		for (curr in s) {
+			when (curr) {
+				'(' -> acc += 1
+				')' -> acc -= 1
+				'*' -> jokers += 1
 				else -> error("invalid character $curr")
 			}
+			// violates 3.
+			if (acc < 0) {
+				if (jokers > 0) {
+					// but we can recover by using * as opening because of 4.
+					jokers -= 1
+					acc += 1
+				} else {
+					return false
+				}
+			}
 		}
-		return result.all { it >= 0 } && result.last() == 0
+		while (acc > 0 && jokers > 0) {
+			// close any remaining parentheses by 4.
+			acc -= 1
+			jokers -= 1
+		}
+		return acc == 0
 	}
 }
