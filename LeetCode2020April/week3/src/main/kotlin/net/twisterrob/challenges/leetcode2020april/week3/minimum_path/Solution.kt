@@ -11,19 +11,19 @@ class Solution {
 
 		// Initialize first row, where the path can only come from left.
 		grid[0].let { firstRow ->
-			for (c in firstRow.indices.drop(1)) {
+			for (c in 1 until firstRow.size) {
 				firstRow[c] = firstRow[c] + firstRow[c - 1]
 			}
 		}
 
 		// Initialize first column, where the path can only come from above.
-		for (r in grid.indices.drop(1)) {
+		for (r in 1 until grid.size) {
 			grid[r][0] = grid[r][0] + grid[r - 1][0]
 		}
 
 		// Calculate the rest of the grid by taking the best route from left or above.
-		for (r in grid.indices.drop(1)) {
-			for (c in grid[r].indices.drop(1)) {
+		for (r in 1 until grid.size) {
+			for (c in 1 until grid[r].size) {
 				grid[r][c] = grid[r][c] + min(grid[r - 1][c], grid[r][c - 1])
 			}
 		}
