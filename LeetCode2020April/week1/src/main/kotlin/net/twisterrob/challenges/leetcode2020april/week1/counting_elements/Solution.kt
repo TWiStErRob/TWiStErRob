@@ -13,12 +13,9 @@ class Solution {
 			.filter { it.first + 1 == it.second }
 			// only look at the element that needs counting
 			.map(Pair<Int, Int>::first)
+			// store for quick lookup
+			.toHashSet()
 
-		val counts = arr
-			.asIterable()
-			.groupingBy { it }
-			.eachCount()
-
-		return elements.sumBy { counts.getValue(it) }
+		return arr.count { it in elements }
 	}
 }
