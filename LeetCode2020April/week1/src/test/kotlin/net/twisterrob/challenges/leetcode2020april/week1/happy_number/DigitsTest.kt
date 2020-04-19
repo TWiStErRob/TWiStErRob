@@ -1,11 +1,7 @@
 package net.twisterrob.challenges.leetcode2020april.week1.happy_number
 
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.DynamicContainer
-import org.junit.jupiter.api.DynamicContainer.dynamicContainer
-import org.junit.jupiter.api.DynamicNode
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest.dynamicTest
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
 class DigitsTest {

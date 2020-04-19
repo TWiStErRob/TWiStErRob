@@ -3,7 +3,6 @@ package net.twisterrob.challenges.leetcode2020april.week3.valid_parenthesis
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
 class SolutionTest {
@@ -19,17 +18,14 @@ class SolutionTest {
 		assertEquals(expectedValid, result)
 	}
 
-	@Test fun `example 1`() {
-		testSolution("()", expectedValid = true)
-	}
+	@TestFactory fun `example 1`() =
+		solutionTest("()", expectedValid = true)
 
-	@Test fun `example 2`() {
-		testSolution("(*)", expectedValid = true)
-	}
+	@TestFactory fun `example 2`() =
+		solutionTest("(*)", expectedValid = true)
 
-	@Test fun `example 3`() {
-		testSolution("(*))", expectedValid = true)
-	}
+	@TestFactory fun `example 3`() =
+		solutionTest("(*))", expectedValid = true)
 
 	@TestFactory fun `edge cases`() = arrayOf(
 		solutionTest("", expectedValid = true),

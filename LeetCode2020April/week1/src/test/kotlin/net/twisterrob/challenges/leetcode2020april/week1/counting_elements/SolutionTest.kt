@@ -2,12 +2,13 @@ package net.twisterrob.challenges.leetcode2020april.week1.counting_elements
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 
 class SolutionTest {
 
 	private fun solutionTest(input: IntArray, expectedResult: Int): DynamicTest =
-		DynamicTest.dynamicTest("${input.toList()} has $expectedResult almost duplicate elements") {
+		dynamicTest("${input.toList()} has $expectedResult almost duplicate elements") {
 			testSolution(input, expectedResult)
 		}
 
