@@ -29,7 +29,7 @@ fun Int.happySequence(): Sequence<Int> =
 	}
 
 fun Int.squaredSum(): Int =
-	this.digits().sumBy { it * it }
+	this.digits().sumOf { it * it }
 
 fun Int.digits(): Sequence<Int> =
 	when (this@digits) {

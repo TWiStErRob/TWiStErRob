@@ -1,22 +1,22 @@
 buildscript {
 	repositories {
-		jcenter()
+		mavenCentral()
 		gradlePluginPortal()
 	}
 	dependencies {
-		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.72")
+		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10")
 	}
 }
 
 plugins {
 	java
-	kotlin("jvm") version "1.3.72" apply false
+	kotlin("jvm") version "1.6.10" apply false
 }
 
 object ver {
-	const val kotlin = "1.3.72"
+	const val kotlin = "1.6.10"
 	const val hamcrest2 = "2.0.0.0"
-	const val junitJupiter = "5.6.2"
+	const val junitJupiter = "5.8.2"
 }
 
 subprojects {
@@ -24,7 +24,7 @@ subprojects {
 	apply(plugin = "kotlin")
 
 	repositories {
-		jcenter()
+		mavenCentral()
 	}
 
 	dependencies { // Kotlin
@@ -45,7 +45,6 @@ subprojects {
 
 	tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 		kotlinOptions {
-			languageVersion = "1.4"
 			freeCompilerArgs = freeCompilerArgs + listOf(
 				"-Xopt-in=kotlin.RequiresOptIn"
 			)
