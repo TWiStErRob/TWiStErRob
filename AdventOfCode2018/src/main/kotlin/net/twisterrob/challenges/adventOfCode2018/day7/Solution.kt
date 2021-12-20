@@ -1,3 +1,5 @@
+@file:Suppress("SpreadOperator")
+
 package net.twisterrob.challenges.adventOfCode2018.day7
 
 import java.io.File
