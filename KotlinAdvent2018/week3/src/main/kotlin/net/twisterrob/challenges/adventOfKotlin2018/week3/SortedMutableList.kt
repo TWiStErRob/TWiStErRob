@@ -11,7 +11,7 @@ package net.twisterrob.challenges.adventOfKotlin2018.week3
 typealias SortedMutableList<T> = java.util.PriorityQueue<T>
 
 operator fun <T : Comparable<T>> SortedMutableList<T>.get(index: Int): T =
-	asSequence().sortedWith(comparator() ?: naturalOrder<T>()).elementAt(index)
+	asSequence().sortedWith(comparator() ?: naturalOrder()).elementAt(index)
 
 fun <T : Comparable<T>> sortedMutableListOf(vararg elements: T): SortedMutableList<T> {
 	return SortedMutableList(elements.asList())

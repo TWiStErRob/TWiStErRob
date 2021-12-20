@@ -4,16 +4,16 @@ dependencies {
 }
 
 task runGlobal(type: JavaExec) {
-	main = "net.twisterrob.challenges.adventOfKotlin2018.week2.global.CoffeeShopKt"
+	mainClass.set("net.twisterrob.challenges.adventOfKotlin2018.week2.global.CoffeeShopKt")
 	classpath = sourceSets.main.runtimeClasspath
 }
 
 task runInstantiate(type: JavaExec) {
-	main = "net.twisterrob.challenges.adventOfKotlin2018.week2.instantiate.CoffeeShopKt"
+	mainClass.set("net.twisterrob.challenges.adventOfKotlin2018.week2.instantiate.CoffeeShopKt")
 	classpath = sourceSets.main.runtimeClasspath
 }
 
 task runNoReflect(type: JavaExec) {
-	main = "net.twisterrob.challenges.adventOfKotlin2018.week2.noreflect.CoffeeShopKt"
+	mainClass.set("net.twisterrob.challenges.adventOfKotlin2018.week2.noreflect.CoffeeShopKt")
 	classpath = sourceSets.main.runtimeClasspath
 }

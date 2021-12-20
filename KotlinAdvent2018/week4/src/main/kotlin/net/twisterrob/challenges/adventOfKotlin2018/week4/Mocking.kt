@@ -1,3 +1,5 @@
+@file:Suppress("SpreadOperator")
+
 package net.twisterrob.challenges.adventOfKotlin2018.week4
 
 import java.lang.reflect.Method
@@ -9,7 +11,7 @@ inline fun <reified T> mock(): T =
 	newProxyInstance(T::class, handler = MockInvocationHandler()) as T
 
 fun <T> setReturnValue(call: () -> T, value: T) =
-	setBody(call, { value })
+	setBody(call) { value }
 
 fun <T> setBody(call: () -> T, behavior: () -> T) {
 	check(behaviorToRecord == NOT_RECORDING) {
@@ -57,8 +59,8 @@ class MockInvocationHandler : KInvocationHandler {
 			"Each ${MockInvocationHandler::class} handles a single mock target only."
 		}
 		return when (behaviorToRecord) {
-			NOT_RECORDING -> when {
-				method.declaringClass == Object::class.java ->
+			NOT_RECORDING -> when (method.declaringClass) {
+				Object::class.java ->
 					invokeObjectMethod(method, proxy, *args)
 				else ->
 					respondWithStubbing(method, *args)
@@ -101,7 +103,7 @@ class MockInvocationHandler : KInvocationHandler {
 			append("No stubs")
 		} else {
 			stubs.forEach { stub ->
-				if (stub.matches(method, * args)) {
+				if (stub.matches(method, *args)) {
 					append("MATCHES ")
 				}
 				append(stub)
