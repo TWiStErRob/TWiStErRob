@@ -1,7 +1,7 @@
 I'm mostly an Android engineer nowadays, but not afraid to dig deep into anything.  
 When I notice something, I try to report it so that it helps the community.
 
-![](https://github-profile-trophy.vercel.app/?username=TWiStErRob)
+![Github stats](https://github-readme-stats.vercel.app/api?username=TWiStErRob)
 
 ## My Apps and Projects on GitHub
 
@@ -11,3 +11,5 @@ When I notice something, I try to report it so that it helps the community.
 
 ## Other
 [My reported Issues in GitHub](https://github.com/search?o=desc&q=author%3ATWiStErRob+-user%3ATWiStErRob&s=updated&type=Issues).
+
+![](https://github-profile-trophy.vercel.app/?username=TWiStErRob)
