@@ -1,7 +1,7 @@
 I'm mostly an Android engineer nowadays, but not afraid to dig deep into anything.  
 When I notice something, I try to report it so that it helps the community.
 
-![Github stats](https://github-readme-stats.vercel.app/api?username=TWiStErRob)
+<!--![Github stats](https://github-readme-stats.vercel.app/api?username=TWiStErRob) -->
 
 ## My Apps and Projects on GitHub
 
