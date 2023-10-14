@@ -1,6 +1,0 @@
-include ':lib1'
-include ':lib2'
-include ':library'
-include ':app'
-
-rootProject.name = 'JavaOverload'
