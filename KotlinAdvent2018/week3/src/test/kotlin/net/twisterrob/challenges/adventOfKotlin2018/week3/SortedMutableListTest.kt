@@ -38,9 +38,9 @@ class SortedMutableListTest {
 
 	@Test
 	fun `When we define elements using sortedMutableListOf, their order is corrected`() {
-		assertCollectionEquals(listOf(1, 2, 5, 6), sortedMutableListOf(2, 6, 1, 5))
-		assertCollectionEquals(listOf(1, 2, 5, 6), sortedMutableListOf(compareBy { it }, 2, 6, 1, 5))
-		assertCollectionEquals(listOf(6, 5, 2, 1), sortedMutableListOf(compareBy { -it }, 2, 6, 1, 5))
+		assertCollectionEquals(listOf(1, 2, 5, 6), sortedMutableListOf(2, 6, 1, 5).toList())
+		assertCollectionEquals(listOf(1, 2, 5, 6), sortedMutableListOf(compareBy { it }, 2, 6, 1, 5).toList())
+		assertCollectionEquals(listOf(6, 5, 2, 1), sortedMutableListOf(compareBy { -it }, 2, 6, 1, 5).toList())
 	}
 
 	@Test
@@ -49,13 +49,13 @@ class SortedMutableListTest {
 		l1.add(4)
 		assertTrue(4 in l1)
 		assertEquals(4, l1[2])
-		assertCollectionEquals(sortedMutableListOf(1, 2, 4, 5, 6), l1)
+		assertCollectionEquals(sortedMutableListOf(1, 2, 4, 5, 6).toList(), l1.toList())
 
 		val l2: SortedMutableList<String> = sortedMutableListOf("A", "B", "D")
 		l2.add("C")
 		assertTrue("C" in l2)
 		assertEquals("C", l2[2])
-		assertCollectionEquals(sortedMutableListOf("A", "B", "C", "D"), l2)
+		assertCollectionEquals(sortedMutableListOf("A", "B", "C", "D").toList(), l2.toList())
 	}
 
 	@Test
@@ -64,14 +64,14 @@ class SortedMutableListTest {
 		l.add("DD")
 		assertEquals(3, l.size)
 		assertTrue("DD" in l)
-		assertCollectionEquals(listOf("B", "DD", "AAA"), l)
+		assertCollectionEquals(listOf("B", "DD", "AAA"), l.toList())
 	}
 
 	@Test
 	fun `Check remove`() {
-		assertCollectionEquals(listOf(1, 2, 5, 6), sortedMutableListOf(2, 6, 8, 1, 5).apply { remove(8) })
-		assertCollectionEquals(listOf(1, 2, 5, 8), sortedMutableListOf(2, 6, 8, 1, 5).apply { remove(6) })
-		assertCollectionEquals(listOf(1, 2, 5, 6, 8), sortedMutableListOf(2, 6, 8, 1, 5).apply { remove(3) })
+		assertCollectionEquals(listOf(1, 2, 5, 6), sortedMutableListOf(2, 6, 8, 1, 5).apply { remove(8) }.toList())
+		assertCollectionEquals(listOf(1, 2, 5, 8), sortedMutableListOf(2, 6, 8, 1, 5).apply { remove(6) }.toList())
+		assertCollectionEquals(listOf(1, 2, 5, 6, 8), sortedMutableListOf(2, 6, 8, 1, 5).apply { remove(3) }.toList())
 	}
 
 	@Test
@@ -109,7 +109,7 @@ class SortedMutableListTest {
 		val numbers = (1..1000).map { Random.nextInt(10_000_000) }
 		val tree = sortedMutableListOf<Int>().apply {
 			for (num in numbers) add(num)
-		}
+		}.toList()
 
 		assertCollectionEquals(tree, numbers.sorted())
 	}

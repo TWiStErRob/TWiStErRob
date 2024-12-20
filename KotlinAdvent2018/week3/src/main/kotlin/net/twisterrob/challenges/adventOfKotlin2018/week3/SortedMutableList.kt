@@ -10,13 +10,15 @@ package net.twisterrob.challenges.adventOfKotlin2018.week3
 
 typealias SortedMutableList<T> = java.util.PriorityQueue<T>
 
+
+fun <T: Comparable<T>> SortedMutableList<T>.toList(): List<T> =
+	this.asSequence().sortedWith(comparator() ?: naturalOrder()).toList()
+
 operator fun <T : Comparable<T>> SortedMutableList<T>.get(index: Int): T =
-	asSequence().sortedWith(comparator() ?: naturalOrder()).elementAt(index)
+	this.toList().elementAt(index)
 
-fun <T : Comparable<T>> sortedMutableListOf(vararg elements: T): SortedMutableList<T> {
-	return SortedMutableList(elements.asList())
-}
+fun <T : Comparable<T>> sortedMutableListOf(vararg elements: T): SortedMutableList<T> =
+	SortedMutableList(elements.asList())
 
-fun <T> sortedMutableListOf(comparator: Comparator<T>, vararg elements: T): SortedMutableList<T> {
-	return SortedMutableList(elements.size + 1, comparator).apply { addAll(elements) }
-}
+fun <T> sortedMutableListOf(comparator: Comparator<T>, vararg elements: T): SortedMutableList<T> =
+	SortedMutableList(elements.size + 1, comparator).apply { addAll(elements) }
