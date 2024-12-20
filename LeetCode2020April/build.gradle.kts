@@ -1,52 +1,35 @@
-buildscript {
-	repositories {
-		mavenCentral()
-		gradlePluginPortal()
-	}
-	dependencies {
-		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10")
-	}
-}
-
 plugins {
-	java
-	kotlin("jvm") version "1.6.10" apply false
+	id("org.jetbrains.kotlin.jvm") version "2.1.0" apply false
 }
 
 object ver {
-	const val kotlin = "1.6.10"
 	const val hamcrest2 = "2.0.0.0"
-	const val junitJupiter = "5.8.2"
+	const val junitJupiter = "5.11.4"
 }
 
 subprojects {
-	apply(plugin = "java-library")
-	apply(plugin = "kotlin")
+	apply(plugin = "org.gradle.java-library")
+	apply(plugin = "org.jetbrains.kotlin.jvm")
 
 	repositories {
 		mavenCentral()
 	}
 
-	dependencies { // Kotlin
-		implementation("org.jetbrains.kotlin:kotlin-stdlib:${ver.kotlin}")
-		implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${ver.kotlin}")
-	}
-
 	dependencies { // Test
-		testImplementation("org.junit.jupiter:junit-jupiter-api:${ver.junitJupiter}")
-		testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${ver.junitJupiter}")
-		testImplementation("org.hamcrest:java-hamcrest:${ver.hamcrest2}")
+		"testImplementation"("org.junit.jupiter:junit-jupiter:${ver.junitJupiter}")
+		"testRuntimeOnly"("org.junit.platform:junit-platform-launcher")
+		"testImplementation"("org.hamcrest:java-hamcrest:${ver.hamcrest2}")
 	}
 
-	tasks.withType<Test> {
+	tasks.withType<Test>().configureEach {
 		useJUnitPlatform()
 		testLogging.events(/*"passed",*/ "skipped", "failed")
 	}
 
-	tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-		kotlinOptions {
-			freeCompilerArgs = freeCompilerArgs + listOf(
-				"-Xopt-in=kotlin.RequiresOptIn"
+	extensions.configure<org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension>("kotlin") {
+		compilerOptions {
+			freeCompilerArgs.add(
+				"-Xopt-in=kotlin.RequiresOptIn",
 			)
 		}
 	}
