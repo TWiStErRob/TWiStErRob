@@ -1,7 +1,8 @@
 /.idea/
 /.gradle/
+/.kotlin/
 /local.properties
-build/
+/build/
 *.iml
 *.ipr
 *.iws

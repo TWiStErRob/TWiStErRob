@@ -14,7 +14,7 @@ class SolutionTest {
 
     @Test
     fun `sample in challenge works`() {
-        val input = SolutionTest::class.java.getResourceAsStream("sampleInput.txt")
+        val input = SolutionTest::class.java.getResourceAsStream("sampleInput.txt")!!
 
         val result = solve(input.use { it.reader().readText() })
 
@@ -23,7 +23,7 @@ class SolutionTest {
 
     @Test
     fun `real input produces an output`() {
-        val input = SolutionTest::class.java.getResourceAsStream("input.txt")
+        val input = SolutionTest::class.java.getResourceAsStream("input.txt")!!
 
         val result = solve(input.use { it.reader().readText() })
 
